@@ -1,12 +1,14 @@
-import type {IdealFormModel} from "./IdealFormModel.ts";
-import {Controller, useForm} from "react-hook-form";
+import type { IdealFormModel } from "./IdealFormModel.ts";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import {yupResolver} from "@hookform/resolvers/yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import IdealFormTemplate from "./IdealFormTemplate.tsx";
-import {useEffect} from "react";
-import {useApiService} from "../../../../core/redux/apiService.ts";
+import { useEffect } from "react";
+import { useApiService } from "../../../../core/redux/apiService.ts";
 
 const IdealForm = () => {
+
+    const apiService = useApiService();
 
     const validations = yup.object().shape({
         userName: yup
@@ -18,6 +20,7 @@ const IdealForm = () => {
             .string() // Use string for mobileNumber to handle empty input
             .required("Mobile number is required")
             .matches(/^[0-9]{10}$/, "Mobile number must be exactly 10 digits"),
+        
     });
 
     const formMethods = useForm<IdealFormModel>({
@@ -34,7 +37,7 @@ const IdealForm = () => {
         // setValue,
         getValues,
         trigger,
-        formState: {errors, isValid}
+        formState: { errors, isValid }
     } = formMethods
 
     const handleButtonClick = async () => {
@@ -58,7 +61,7 @@ const IdealForm = () => {
     };
 
     const getData = async () => {
-        return await useApiService().get('user')
+        return await apiService.get('user')
     }
 
     useEffect(() => {
@@ -68,7 +71,7 @@ const IdealForm = () => {
     }, [])
 
     return (
-        <IdealFormTemplate props={templateProps}/>
+        <IdealFormTemplate props={templateProps} />
     )
 
 };
